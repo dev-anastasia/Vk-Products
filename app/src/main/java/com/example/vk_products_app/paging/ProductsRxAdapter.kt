@@ -1,13 +1,18 @@
 package com.example.vk_products_app.paging
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toDrawable
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.vk_products_app.R
 import com.example.vk_products_app.adapter.ProductViewHolder
 import com.example.vk_products_app.entities.Product
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
+import java.lang.Exception
 
 class ProductsRxAdapter : PagingDataAdapter<Product, ProductViewHolder>(DIFF) {
 
@@ -25,6 +30,7 @@ class ProductsRxAdapter : PagingDataAdapter<Product, ProductViewHolder>(DIFF) {
 
         Picasso.get()
             .load(getItem(position)?.thumbnail)
+            .placeholder(R.drawable.thumbnail_placeholder)
             .into(holder.thumbnail)
 
         // Далее будет clickListener - открытие страницы товара

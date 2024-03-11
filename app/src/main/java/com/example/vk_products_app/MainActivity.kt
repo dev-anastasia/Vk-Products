@@ -2,8 +2,11 @@ package com.example.vk_products_app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 
 class MainActivity : AppCompatActivity() {
+
+    val vm: SearchViewModel by viewModels { SearchViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

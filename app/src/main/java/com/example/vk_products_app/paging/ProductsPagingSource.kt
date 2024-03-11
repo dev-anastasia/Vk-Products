@@ -3,6 +3,7 @@ package com.example.vk_products_app.paging
 import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
+import com.example.vk_products_app.SearchViewModel.Companion.LIMIT
 import com.example.vk_products_app.SearchViewModel.Companion.SKIP
 import com.example.vk_products_app.entities.Product
 import com.example.vk_products_app.entities.ProductsList
@@ -17,7 +18,7 @@ class ProductsPagingSource : RxPagingSource<Int, Product>() {
         Log.d("TAG", "ProductsPagingSource loadSingle")
         return productsSearchService.getSearchResults(SKIP)
             .map { toLoadResult(it, SKIP) }
-            .doOnSuccess { SKIP += 20}
+            .doOnSuccess { SKIP += LIMIT}
             .onErrorReturn { LoadResult.Error(it) }
     }
 
@@ -25,8 +26,8 @@ class ProductsPagingSource : RxPagingSource<Int, Product>() {
         Log.d("TAG", "ProductsPagingSource toLoadResult")
         return LoadResult.Page(
             data = data.products,
-            prevKey = if (position == 0) null else position - 20,
-            nextKey = if (position >= data.total) null else position + 20,
+            prevKey = if (position == 0) null else position - LIMIT,
+            nextKey = if (position >= data.total) null else position + LIMIT,
         )
     }
 }
