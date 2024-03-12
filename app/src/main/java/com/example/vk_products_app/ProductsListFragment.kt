@@ -20,16 +20,21 @@ import com.example.vk_products_app.SearchViewModel.Companion.SKIP
 import com.example.vk_products_app.SearchViewModel.Companion.SUCCESS
 import com.example.vk_products_app.entities.Product
 import com.example.vk_products_app.paging.ProductsRxAdapter
+import com.example.vk_products_app.ui.ItemClickListener
+import com.example.vk_products_app.ui.ProductInfoFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEmpty
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 
-class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
+class ProductsListFragment : Fragment(R.layout.fragment_products_list), ItemClickListener {
 
     private lateinit var vm: SearchViewModel
     private var queryRunnable: Runnable? = null
@@ -52,7 +57,7 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         recyclerView.layoutManager = GridLayoutManager(
             activity, 2,
         )
-        productsAdapter = ProductsRxAdapter()
+        productsAdapter = ProductsRxAdapter(this)
         recyclerView.adapter = productsAdapter
 
         // Observers
@@ -96,7 +101,6 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
                 vm.changeUiState(SUCCESS)
             } else {
                 val flow = vm.getProductsList()
-                    .cachedIn(this@launch)
                 getAndSubmitResults(flow)
             }
         }
@@ -105,26 +109,10 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         queryRunnable = Runnable {
             if (CURRENT_QUERY.isEmpty().not()) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val flow = vm.getProductsList().cachedIn(this@launch)
+                    val flow = vm.getProductsList()
                     getAndSubmitResults(flow)
                 }
             }
-        }
-    }
-
-    private fun getAndSubmitResults(flow: Flow<PagingData<Product>>) {
-        CoroutineScope(Dispatchers.Main).launch {
-            flow.onEmpty {
-                vm.changeUiState(NO_RESULTS)
-            }
-                .catch {
-                    vm.changeUiState(ERROR)
-                }
-                .collect {
-                    vm.pagingData.postValue(it)
-                    vm.changeUiState(SUCCESS)
-                    productsAdapter!!.submitData(it)
-                }
         }
     }
 
@@ -135,8 +123,9 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
             object : SearchView.OnQueryTextListener {
 
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    CURRENT_QUERY = query ?: ""
                     queryCoroutine?.cancel()
-                    CoroutineScope(Dispatchers.IO).launch {
+                    queryCoroutine = CoroutineScope(Dispatchers.IO).launch {
                         SKIP = 0
                         queryRunnable?.run()
                     }
@@ -165,6 +154,28 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         super.onDestroy()
     }
 
+    private fun getAndSubmitResults(flow: Flow<PagingData<Product>>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            flow
+                .cachedIn(this)
+                .onEmpty {
+                    vm.changeUiState(NO_RESULTS)
+                }
+                .catch {
+                    vm.changeUiState(ERROR)
+                }
+                .onCompletion {
+                    queryRunnable = null
+                    queryCoroutine?.cancel()
+                }
+                .collect {
+                    vm.pagingData.postValue(it)
+                    vm.changeUiState(SUCCESS)
+                    productsAdapter!!.submitData(it)
+                }
+        }
+    }
+
     private fun hideSoftKeyboard() {
         val v: View? = requireActivity().currentFocus
         val inputMethodManager =
@@ -175,8 +186,22 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         )
     }
 
+    override fun onClick(item: Product) {
+        val productInfoFr = ProductInfoFragment()
+        val bundle = Bundle()
+        bundle.putParcelable(KEY, item)
+        productInfoFr.arguments = bundle
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_activity_fragment_container, productInfoFr)
+            .addToBackStack("new ProductInfoFragment added")
+            .setReorderingAllowed(true)
+            .commit()
+    }
+
     companion object {
         var CURRENT_QUERY: String = ""
+        const val KEY = "KEY"
         private const val DELAY_TIMER = 2000L
     }
 }

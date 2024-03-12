@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 class SearchViewModel(private val repository: ProductsRemoteDataSource) : ViewModel() {
 
     val pagingData = MutableLiveData<PagingData<Product>>()
+    val currentItem = MutableLiveData<Product>()
 
     val searchUiState: LiveData<SearchUIState<Int>>
         get() = _searchUiState

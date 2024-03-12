@@ -23,7 +23,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:baselineAligned="true"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,6 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sv_search"
-        tools:listitem="@layout/product_card_view" />
+        tools:listitem="@layout/recycler_view_card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

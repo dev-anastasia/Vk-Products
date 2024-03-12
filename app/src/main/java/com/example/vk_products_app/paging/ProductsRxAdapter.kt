@@ -1,24 +1,20 @@
 package com.example.vk_products_app.paging
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toDrawable
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.vk_products_app.R
 import com.example.vk_products_app.adapter.ProductViewHolder
 import com.example.vk_products_app.entities.Product
+import com.example.vk_products_app.ui.ItemClickListener
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
-import java.lang.Exception
 
-class ProductsRxAdapter : PagingDataAdapter<Product, ProductViewHolder>(DIFF) {
+class ProductsRxAdapter(private val listener: ItemClickListener) : PagingDataAdapter<Product, ProductViewHolder>(DIFF) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.product_card_view, parent, false
+            R.layout.recycler_view_card, parent, false
         )
         return ProductViewHolder(itemView)
     }
@@ -33,7 +29,10 @@ class ProductsRxAdapter : PagingDataAdapter<Product, ProductViewHolder>(DIFF) {
             .placeholder(R.drawable.thumbnail_placeholder)
             .into(holder.thumbnail)
 
-        // Далее будет clickListener - открытие страницы товара
+        // ClickListener: нажатие на карточку товара
+        holder.itemView.setOnClickListener {
+            listener.onClick(getItem(position)!!)
+        }
     }
 
     companion object {

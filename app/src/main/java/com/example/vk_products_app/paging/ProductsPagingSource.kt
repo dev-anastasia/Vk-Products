@@ -1,5 +1,6 @@
 package com.example.vk_products_app.paging
 
+import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
 import com.example.vk_products_app.ProductsListFragment.Companion.CURRENT_QUERY
@@ -16,11 +17,13 @@ class ProductsPagingSource : RxPagingSource<Int, Product>() {
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, Product>> {
         return if (CURRENT_QUERY.isEmpty()) {
+            Log.d("TAG", "loadSingle isEmpty")
             productsSearchService.getSearchResults(SKIP)
                 .map { toLoadResult(it, SKIP) }
                 .doOnSuccess { SKIP += LIMIT }
                 .onErrorReturn { LoadResult.Error(it) }
         } else {
+            Log.d("TAG", "loadSingle is NOT empty")
             productsSearchService.query(CURRENT_QUERY, SKIP)
                 .map { toLoadResult(it, SKIP) }
                 .doOnSuccess { SKIP += LIMIT }
