@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductsRemoteDataSource {
 
-    fun getProducts(): Flow<PagingData<Product>>
+    fun getProducts(skip: Int, queryText: String, limit: Int): Flow<PagingData<Product>>
 }

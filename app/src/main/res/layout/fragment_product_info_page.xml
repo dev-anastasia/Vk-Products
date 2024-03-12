@@ -2,6 +2,7 @@
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -41,7 +42,8 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vp_product_image_view_pager" />
+            app:layout_constraintTop_toBottomOf="@id/vp_product_image_view_pager"
+            tools:text="@string/test_title" />
 
         <TextView
             android:id="@+id/tv_brand_name"
@@ -53,7 +55,8 @@
             android:textAllCaps="true"
             android:textColor="@color/dark_grey"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_product_title_product_info_fr" />
+            app:layout_constraintTop_toBottomOf="@id/tv_product_title_product_info_fr"
+            tools:text="@string/test_brand" />
 
         <TextView
             android:id="@+id/tv_product_rating"
@@ -65,7 +68,17 @@
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_product_title_product_info_fr"
-            app:layout_constraintTop_toBottomOf="@id/vp_product_image_view_pager" />
+            app:layout_constraintTop_toBottomOf="@id/vp_product_image_view_pager"
+            tools:text="@string/test_rating" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/icon_star"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_product_price"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_rating" />
 
         <TextView
             android:id="@+id/tv_product_price"
@@ -76,7 +89,8 @@
             android:textColor="@color/green"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_brand_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_brand_name"
+            tools:text="@string/test_price" />
 
         <TextView
             android:id="@+id/tv_description_product_info_fr"
@@ -88,8 +102,8 @@
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_product_price" />
-
+            app:layout_constraintTop_toBottomOf="@id/tv_product_price"
+            tools:text="@string/test_descr" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

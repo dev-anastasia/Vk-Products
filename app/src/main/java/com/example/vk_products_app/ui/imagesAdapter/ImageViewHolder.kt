@@ -1,4 +1,4 @@
-package com.example.vk_products_app.ui
+package com.example.vk_products_app.ui.imagesAdapter
 
 import android.view.View
 import android.widget.ImageView

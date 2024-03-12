@@ -1,10 +1,9 @@
-package com.example.vk_products_app.adapter
+package com.example.vk_products_app.ui.imagesAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vk_products_app.R
-import com.example.vk_products_app.ui.ImageViewHolder
 import com.squareup.picasso.Picasso
 
 class ImagesSwipeAdapter(private val listOfImages: List<String>) :

@@ -1,4 +1,4 @@
-package com.example.vk_products_app.ui
+package com.example.vk_products_app.ui.productsAdapter
 
 import com.example.vk_products_app.entities.Product
 

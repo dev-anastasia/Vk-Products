@@ -1,5 +1,6 @@
-package com.example.vk_products_app
+package com.example.vk_products_app.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,55 +13,53 @@ import com.example.vk_products_app.paging.ProductsRemoteDataSource
 import com.example.vk_products_app.paging.ProductsRemoteDataSourceImpl
 import kotlinx.coroutines.flow.Flow
 
-class SearchViewModel(private val repository: ProductsRemoteDataSource) : ViewModel() {
+class ProductsViewModel(private val repository: ProductsRemoteDataSource) : ViewModel() {
 
     val pagingData = MutableLiveData<PagingData<Product>>()
     val currentItem = MutableLiveData<Product>()
-
     val searchUiState: LiveData<SearchUIState<Int>>
         get() = _searchUiState
     private val _searchUiState = MutableLiveData<SearchUIState<Int>>(null)
+    private val limit = 20
 
-    fun getProductsList(): Flow<PagingData<Product>> {
-        changeUiState(LOADING)
-        return repository.getProducts()
+    fun getProductsList(queryText: String): Flow<PagingData<Product>> {
+        changeUiState(LOADING_KEYWORD)
+        return repository.getProducts(SKIP, queryText, limit)
     }
 
     fun changeUiState(newState: String) {
         when (newState) {
 
-            ERROR -> {
+            ERROR_KEYWORD -> {
+                SKIP = 0
                 _searchUiState.postValue(SearchUIState.Error)
             }
 
-            NO_RESULTS -> {
-                _searchUiState.postValue(SearchUIState.NoResults)
-            }
-
-            SUCCESS -> {
+            SUCCESS_KEYWORD -> {
                 _searchUiState.postValue(SearchUIState.Success)
             }
 
-            LOADING -> {
+            LOADING_KEYWORD -> {
                 _searchUiState.postValue(SearchUIState.Loading)
+            }
+
+            else -> {
+                Log.d("TAG", "Unknown SearchUiState")
             }
         }
     }
 
     companion object {
-
-        const val LIMIT = 20
-        const val ERROR = "ERROR"
-        const val LOADING = "LOADING"
-        const val SUCCESS = "SUCCESS"
-        const val NO_RESULTS = "NO RESULTS"
         var SKIP = 0
+        const val ERROR_KEYWORD = "ERROR"
+        const val LOADING_KEYWORD = "LOADING"
+        const val SUCCESS_KEYWORD = "SUCCESS"
 
         private val repo = ProductsRemoteDataSourceImpl()
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                SearchViewModel(repo)
+                ProductsViewModel(repo)
             }
         }
     }

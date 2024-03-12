@@ -1,12 +1,11 @@
-package com.example.vk_products_app
+package com.example.vk_products_app.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.example.vk_products_app.R
+import com.example.vk_products_app.ui.fragments.ProductsListFragment
 
 class MainActivity : AppCompatActivity() {
-
-    val vm: SearchViewModel by viewModels { SearchViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +18,5 @@ class MainActivity : AppCompatActivity() {
                 .setReorderingAllowed(true)
                 .commit()
         }
-
-
     }
 }

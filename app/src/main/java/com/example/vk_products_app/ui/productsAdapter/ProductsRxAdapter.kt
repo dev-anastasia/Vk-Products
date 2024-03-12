@@ -1,25 +1,24 @@
-package com.example.vk_products_app.paging
+package com.example.vk_products_app.ui.productsAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.vk_products_app.R
-import com.example.vk_products_app.adapter.ProductViewHolder
 import com.example.vk_products_app.entities.Product
-import com.example.vk_products_app.ui.ItemClickListener
 import com.squareup.picasso.Picasso
 
-class ProductsRxAdapter(private val listener: ItemClickListener) : PagingDataAdapter<Product, ProductViewHolder>(DIFF) {
+class ProductsRxAdapter(private val listener: ItemClickListener) :
+    PagingDataAdapter<Product, ProductRxViewHolder>(DIFF) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductRxViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.recycler_view_card, parent, false
         )
-        return ProductViewHolder(itemView)
+        return ProductRxViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProductRxViewHolder, position: Int) {
         holder.title.text = getItem(position)?.title
 
         holder.description.text = getItem(position)?.description
