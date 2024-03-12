@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Vk_products_app</string>
+    <string name="sv_hint_text">Look for…</string>
+
 </resources>

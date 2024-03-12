@@ -3,7 +3,6 @@ package com.example.vk_products_app.paging
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.rxjava2.observable
 import com.example.vk_products_app.entities.Product
 import kotlinx.coroutines.flow.Flow
 
